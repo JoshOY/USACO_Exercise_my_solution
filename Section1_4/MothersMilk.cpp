@@ -1,13 +1,12 @@
 /*
 ID: joshoy71
-PROG: ariprog
+PROG: milk3
 LANG: C++11
 */
 
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include <set>
 #include <deque>
 using namespace std;
 
@@ -35,6 +34,7 @@ typedef struct
 	int bv;
 	int cv;
 	Trans trans;
+	int count;
 } step;
 
 const int MAX_CAP = 20;
@@ -158,55 +158,57 @@ void pour()
 	if (A.v == 0)
 		possibility[C.v] = true;
 
-	if (C.v != C.cap) {
+	if (C.v != C.cap && st.count < 14) {
 		//push next steps
 		if (canPour(A, B) && (st.trans != b_to_a || checkNotRedo(a_to_b)))
-			stepsQueue.push_back({ A.v, B.v, C.v, a_to_b });
+			stepsQueue.push_back({ A.v, B.v, C.v, a_to_b , st.count+1 });
 		if (canPour(A, C) && (st.trans != c_to_a || checkNotRedo(a_to_c)))
-			stepsQueue.push_back({ A.v, B.v, C.v, a_to_c });
+			stepsQueue.push_back({ A.v, B.v, C.v, a_to_c, st.count + 1 });
 		if (canPour(B, A) && (st.trans != a_to_b || checkNotRedo(b_to_a)))
-			stepsQueue.push_back({ A.v, B.v, C.v, b_to_a });
+			stepsQueue.push_back({ A.v, B.v, C.v, b_to_a, st.count + 1 });
 		if (canPour(B, C) && (st.trans != c_to_b || checkNotRedo(b_to_c)))
-			stepsQueue.push_back({ A.v, B.v, C.v, b_to_c });
+			stepsQueue.push_back({ A.v, B.v, C.v, b_to_c, st.count + 1 });
 		if (canPour(C, A) && (st.trans != a_to_c || checkNotRedo(c_to_a)))
-			stepsQueue.push_back({ A.v, B.v, C.v, c_to_a });
+			stepsQueue.push_back({ A.v, B.v, C.v, c_to_a, st.count + 1 });
 		if (canPour(C, B) && (st.trans != b_to_c || checkNotRedo(c_to_b)))
-			stepsQueue.push_back({ A.v, B.v, C.v, c_to_b });
+			stepsQueue.push_back({ A.v, B.v, C.v, c_to_b, st.count + 1 });
 	}
 
 	stepsQueue.pop_front();
-	if (stepsQueue.size() == 0)
-		return;
-	else
-		return pour();
+	return;
 }
 
 int main(int argc, char* argv[])
 {
-	//ifstream fin("milk3.in");
-	//ofstream fout("milk3.out");
+	ifstream fin("milk3.in");
+	ofstream fout("milk3.out");
 	int a_max, b_max, c_max;
-	//fin >> a_max >> b_max >> c_max;
-
-	a_max = 8;
-	b_max = 9;
-	c_max = 10;
+	fin >> a_max >> b_max >> c_max;
 
 	A = { a_max, 0 };
 	B = { b_max, 0 };
 	C = { c_max, c_max };
 	possibility[c_max] = true;
 
-	stepsQueue.push_back({ A.v, B.v, C.v, c_to_a });
-	stepsQueue.push_back({ A.v, B.v, C.v, c_to_b });
-	pour();
+	stepsQueue.push_back({ A.v, B.v, C.v, c_to_a , 0});
+	stepsQueue.push_back({ A.v, B.v, C.v, c_to_b , 0});
+	while (stepsQueue.size() != 0){
+		pour();
+	}
 
+	vector<int> possibilityVec;
 	for (int i = 0; i <= MAX_CAP; ++i) {
 		if (possibility[i] == true) {
-			cout << i << " ";
+			possibilityVec.push_back(i);
 		}
 	}
-	cout << endl;
+	for (int i = 0; i < possibilityVec.size(); ++i) {
+		fout << possibilityVec[i] ;
+		if(i != possibilityVec.size() - 1)
+			fout << " ";
+		else
+			fout << endl;
+	}
 
 	return 0;
 }
