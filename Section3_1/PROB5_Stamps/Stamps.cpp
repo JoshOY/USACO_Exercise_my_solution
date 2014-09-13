@@ -4,6 +4,24 @@ PROG: stamps
 LANG: C++11
 */
 
+/*
+TEST RESULT:
+   Test 1: TEST OK [0.011 secs, 11308 KB]
+   Test 2: TEST OK [0.011 secs, 11308 KB]
+   Test 3: TEST OK [0.014 secs, 11308 KB]
+   Test 4: TEST OK [0.027 secs, 11308 KB]
+   Test 5: TEST OK [0.019 secs, 11308 KB]
+   Test 6: TEST OK [0.022 secs, 11308 KB]
+   Test 7: TEST OK [0.027 secs, 11308 KB]
+   Test 8: TEST OK [0.016 secs, 11308 KB]
+   Test 9: TEST OK [0.016 secs, 11308 KB]
+   Test 10: TEST OK [0.078 secs, 11308 KB]
+   Test 11: TEST OK [0.559 secs, 11308 KB]
+   Test 12: TEST OK [0.178 secs, 11308 KB]
+   Test 13: TEST OK [0.030 secs, 11308 KB]
+*/
+
+
 #include <fstream>
 
 using namespace std;
