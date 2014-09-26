@@ -4,8 +4,21 @@ PROG: butter
 LANG: C++11
 */
 
+/*
+TEST RESULT:
+   Test 1: TEST OK [0.008 secs, 9912 KB]
+   Test 2: TEST OK [0.005 secs, 9912 KB]
+   Test 3: TEST OK [0.016 secs, 9912 KB]
+   Test 4: TEST OK [0.014 secs, 9912 KB]
+   Test 5: TEST OK [0.019 secs, 9912 KB]
+   Test 6: TEST OK [0.035 secs, 9912 KB]
+   Test 7: TEST OK [0.121 secs, 9912 KB]
+   Test 8: TEST OK [0.381 secs, 9912 KB]
+   Test 9: TEST OK [0.705 secs, 9912 KB]
+   Test 10: TEST OK [0.724 secs, 9912 KB]
+*/
+
 #include <fstream>
-#include <queue>
 
 using namespace std;
 
@@ -21,10 +34,12 @@ int C;	//number of paths
 ifstream fin("butter.in");
 ofstream fout("butter.out");
 
+
 int graph[P_MAX + 1][P_MAX + 1];
 int cowNumOfPastures[P_MAX + 1];
 bool pastureInQueue[P_MAX + 1] = { false };
-queue<int> q;
+int q[1000001] = { 0 };
+int frontIndex, backIndex;
 
 void initAndInput()
 {
@@ -55,30 +70,34 @@ void spfa()
 	int frontElement;
 	int linking;
 
+	frontIndex = backIndex = 0;
+
 	for (int sugarPlace = 1; sugarPlace <= P; ++sugarPlace) {
 		//At first we get the directly linked pastures into the queue q...
 		for (linking = 1; linking <= P; ++linking) {
 			if (graph[sugarPlace][linking] != INFI) {
-				q.push(linking);
+				q[backIndex + 1] = linking;
+				backIndex += 1;
 			}
 		}
 
 		//So here we go with it...
-		while (!q.empty()) {
-			frontElement = q.front();
-			q.pop();
+		while (frontIndex != backIndex) {
+			frontElement = q[frontIndex];
+			frontIndex += 1;
 			pastureInQueue[frontElement] = false;
 			for (linking = sugarPlace + 1; linking <= P; ++linking) {
 				if (graph[sugarPlace][frontElement] + graph[frontElement][linking] < graph[sugarPlace][linking]) {
 					graph[sugarPlace][linking] = graph[sugarPlace][frontElement] + graph[frontElement][linking];
 					if (!pastureInQueue[linking]) {
-						q.push(linking);
+						q[backIndex + 1] = linking;
+						backIndex += 1;
 						pastureInQueue[linking] = true;
 					}
 				}
 			}
 		}
-		for(linking = sugarPlace + 1; linking <= P; ++linking) {
+		for (linking = sugarPlace + 1; linking <= P; ++linking) {
 			graph[linking][sugarPlace] = graph[sugarPlace][linking];
 		}
 	}
