@@ -32,16 +32,6 @@ static int fenceNumOfFarm[FARM_MAX + 1] = { 0 };
 static int remainFenceNumOfFarm[FARM_MAX + 1] = { 0 };
 static vector<int> result;
 
-int remainFence(int nodeOrder)
-{
-	int n = 0;
-	for (int i = 1; i <= FARM_MAX; ++i) {
-		if (graph[nodeOrder][i] != 0) {
-			n += graph[nodeOrder][i];
-		}
-	}
-	return n;
-}
 
 void input()
 {
@@ -83,7 +73,6 @@ void dfs(int currentNode)
 void solve()
 {
 	int start = 1;
-	int end = -1;
 	bool findOddStartPoint = false;
 	for (start = 1; start <= FARM_MAX; ++start) {
 		if (fenceNumOfFarm[start] & 0x0001) {
@@ -95,12 +84,6 @@ void solve()
 	if (findOddStartPoint == false) {
 		for (start = 1; start <= FARM_MAX; ++start) {
 			if (fenceNumOfFarm[start] != 0) {
-				break;
-			}
-		}
-	} else {
-		for (end = start + 1; end <= FARM_MAX; ++end) {
-			if (fenceNumOfFarm[end] & 0x0001) {
 				break;
 			}
 		}
